@@ -442,6 +442,9 @@
   /* Error state */
   .field-error { border-color: #C0392B !important; }
   .error-msg { font-size: 11px; color: #C0392B; font-weight: 500; margin-top: 2px; }
+  .lgpd-notice { display: flex; align-items: flex-start; gap: 10px; padding: 12px 16px; background: rgba(21,48,41,0.04); border: 0.5px solid rgba(21,48,41,0.12); border-radius: 8px; font-size: 12px; color: var(--texto-suave); line-height: 1.6; font-weight: 300; }
+  .lgpd-notice svg { flex-shrink: 0; margin-top: 2px; stroke: var(--verde-medio); }
+  .lgpd-notice strong { font-weight: 600; color: var(--verde-escuro); }
 
   /* Responsive */
   @media (max-width: 860px) {
@@ -685,6 +688,10 @@
             <option>Outro</option>
           </select>
         </div>
+        <div class="lgpd-notice">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          <span>Seus dados são tratados com sigilo e utilizados exclusivamente para contato e diagnóstico inicial. Em conformidade com a <strong>Lei Geral de Proteção de Dados (LGPD — Lei 13.709/2018)</strong>, você pode solicitar a exclusão ou correção das suas informações a qualquer momento pelo e-mail consultoriaisasouza@gmail.com.</span>
+        </div>
         <div class="nav-row">
           <button type="button" class="btn-back" onclick="goBack(5)">Voltar</button>
           <button type="submit" class="btn-submit" onclick="prepareSubmit()">Enviar</button>
@@ -784,25 +791,37 @@ function goBack(step) {
 
 function prepareSubmit() {}
 
-// Interceptar envio para mostrar tela de sucesso
+// Envio via JSON para Web3Forms
 document.getElementById('fs-form').addEventListener('submit', function(e) {
   e.preventDefault();
   const form = this;
-  const data = new FormData(form);
+  const formData = new FormData(form);
+  const payload = {};
+  formData.forEach((value, key) => { if (value !== '') payload[key] = value; });
 
-  fetch(form.action, {
+  // Adicionar e-mail do lead como replyto
+  const emailField = document.getElementById('email');
+  if (emailField && emailField.value) payload['replyto'] = emailField.value;
+
+  fetch('https://api.web3forms.com/submit', {
     method: 'POST',
-    body: data,
-    headers: { 'Accept': 'application/json' }
-  }).then(res => {
-    if (res.ok) {
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
       form.style.display = 'none';
       document.getElementById('steps-nav').style.display = 'none';
       document.getElementById('success').classList.add('active');
     } else {
-      alert('Algo deu errado. Tente novamente ou entre em contato via WhatsApp.');
+      alert('Não foi possível enviar. Tente novamente ou fale via WhatsApp.');
     }
-  }).catch(() => {
+  })
+  .catch(() => {
     alert('Erro de conexão. Verifique sua internet e tente novamente.');
   });
 });
