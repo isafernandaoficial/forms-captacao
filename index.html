@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Isa Fernanda Consultoria Empresarial — Vamos conversar?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --verde-escuro: #153029;
+    --verde-medio: #1A4738;
+    --cobre: #AD7F67;
+    --lavanda: #E6E1E7;
+    --off-white: #F7F5F2;
+    --texto: #1C1C1A;
+    --texto-suave: #5C5C58;
+    --borda: rgba(21,48,41,0.15);
+    --borda-hover: #AD7F67;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Raleway', sans-serif;
+    background: var(--off-white);
+    color: var(--texto);
+    min-height: 100vh;
+  }
+
+  /* Layout */
+  .page {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100vh;
+  }
+
+  /* Painel esquerdo */
+  .sidebar {
+    background: var(--verde-escuro);
+    padding: 3.5rem 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+  }
+
+  .sidebar-top { display: flex; flex-direction: column; gap: 2.5rem; }
+
+  .brand-mark {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .brand-mark .sigla {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    color: var(--cobre);
+    letter-spacing: 0.04em;
+  }
+  .brand-mark .nome {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(230,225,231,0.55);
+  }
+
+  .sidebar-headline {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .sidebar-headline h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    line-height: 1.3;
+    color: var(--lavanda);
+    font-weight: 400;
+  }
+  .sidebar-headline h1 em {
+    color: var(--cobre);
+    font-style: italic;
+  }
+  .sidebar-headline p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(230,225,231,0.65);
+    font-weight: 300;
+  }
+
+  .sidebar-pillars {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .pillar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border: 0.5px solid rgba(173,127,103,0.25);
+    border-radius: 8px;
+    background: rgba(173,127,103,0.06);
+  }
+  .pillar-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--cobre);
+    font-style: italic;
+    width: 20px;
+    flex-shrink: 0;
+  }
+  .pillar-text {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: rgba(230,225,231,0.7);
+  }
+
+  .sidebar-footer {
+    font-size: 11px;
+    color: rgba(230,225,231,0.3);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+  .sidebar-footer strong {
+    color: rgba(230,225,231,0.5);
+    font-weight: 400;
+  }
+
+  /* Painel direito - forms */
+  .form-panel {
+    padding: 3.5rem 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 600px;
+  }
+
+  /* Steps nav */
+  .steps-nav {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 2.5rem;
+  }
+  .step-dot {
+    height: 3px;
+    border-radius: 2px;
+    background: var(--borda);
+    transition: all 0.3s ease;
+    flex: 1;
+  }
+  .step-dot.active { background: var(--verde-medio); }
+  .step-dot.done { background: var(--cobre); }
+
+  /* Steps */
+  .step { display: none; flex-direction: column; gap: 1.5rem; animation: fadeUp 0.3s ease; }
+  .step.active { display: flex; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .step-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .step-tag {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cobre);
+  }
+  .step-question {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--verde-escuro);
+    line-height: 1.35;
+  }
+  .step-hint {
+    font-size: 13px;
+    color: var(--texto-suave);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  /* Fields */
+  .field-group { display: flex; flex-direction: column; gap: 6px; }
+  .field-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--texto-suave);
+  }
+  .field-optional {
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+    color: rgba(92,92,88,0.6);
+    margin-left: 4px;
+  }
+
+  input[type=text],
+  input[type=email],
+  input[type=tel],
+  input[type=number],
+  textarea,
+  select {
+    width: 100%;
+    padding: 11px 14px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--texto);
+    background: #fff;
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -webkit-appearance: none;
+  }
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--verde-medio);
+    box-shadow: 0 0 0 3px rgba(26,71,56,0.08);
+  }
+  input::placeholder, textarea::placeholder {
+    color: rgba(92,92,88,0.45);
+    font-weight: 300;
+  }
+  textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+  select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235C5C58' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .insta-wrap {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .insta-wrap:focus-within {
+    border-color: var(--verde-medio);
+    box-shadow: 0 0 0 3px rgba(26,71,56,0.08);
+  }
+  .insta-at {
+    padding: 11px 10px 11px 14px;
+    font-size: 14px;
+    color: var(--cobre);
+    font-weight: 500;
+    background: rgba(173,127,103,0.07);
+    border-right: 1px solid var(--borda);
+    flex-shrink: 0;
+  }
+  .insta-wrap input {
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    padding-left: 10px;
+  }
+  .insta-wrap input:focus { box-shadow: none; }
+
+  /* Options */
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 13px 16px;
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    background: #fff;
+  }
+  .opt:hover { border-color: var(--cobre); background: rgba(173,127,103,0.04); }
+  .opt.selected { border-color: var(--verde-medio); background: rgba(26,71,56,0.05); }
+  .opt-marker {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(92,92,88,0.35);
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+  .opt.selected .opt-marker {
+    background: var(--verde-medio);
+    border-color: var(--verde-medio);
+  }
+  .opt.selected .opt-marker::after {
+    content: '';
+    display: block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #fff;
+  }
+  .opt-check .opt-marker { border-radius: 4px; }
+  .opt-body { display: flex; flex-direction: column; gap: 2px; }
+  .opt-text { font-size: 14px; color: var(--texto); line-height: 1.45; font-weight: 400; }
+  .opt-sub { font-size: 12px; color: var(--texto-suave); font-weight: 300; }
+
+  /* Nota de contexto */
+  .context-note {
+    padding: 12px 16px;
+    background: rgba(173,127,103,0.08);
+    border-left: 2px solid var(--cobre);
+    border-radius: 0 8px 8px 0;
+    font-size: 13px;
+    color: var(--texto-suave);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  /* Navigation */
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
+  }
+  .btn-back {
+    padding: 10px 20px;
+    background: transparent;
+    color: var(--texto-suave);
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.04em;
+  }
+  .btn-back:hover { background: rgba(21,48,41,0.04); border-color: rgba(21,48,41,0.25); }
+  .btn-next {
+    padding: 11px 28px;
+    background: var(--verde-escuro);
+    color: var(--lavanda);
+    border: none;
+    border-radius: 8px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .btn-next:hover { background: var(--verde-medio); }
+  .btn-next:active { transform: scale(0.98); }
+  .btn-submit {
+    padding: 11px 28px;
+    background: var(--cobre);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .btn-submit:hover { background: #9B6E57; }
+  .btn-submit:active { transform: scale(0.98); }
+
+  /* Tela de sucesso */
+  .success-screen {
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+    animation: fadeUp 0.4s ease;
+  }
+  .success-screen.active { display: flex; }
+  .success-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgba(26,71,56,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .success-icon svg { stroke: var(--verde-medio); fill: none; width: 24px; height: 24px; }
+  .success-screen h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--verde-escuro);
+    line-height: 1.3;
+  }
+  .success-screen p {
+    font-size: 14px;
+    color: var(--texto-suave);
+    line-height: 1.7;
+    font-weight: 300;
+    max-width: 420px;
+  }
+  .btn-whatsapp {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    background: var(--verde-escuro);
+    color: var(--lavanda);
+    border-radius: 8px;
+    text-decoration: none;
+    font-family: 'Raleway', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: background 0.15s;
+    margin-top: 4px;
+  }
+  .btn-whatsapp:hover { background: var(--verde-medio); }
+
+  /* Campos ocultos do Formspree */
+  .form-hidden { display: none; }
+
+  /* Error state */
+  .field-error { border-color: #C0392B !important; }
+  .error-msg { font-size: 11px; color: #C0392B; font-weight: 500; margin-top: 2px; }
+
+  /* Responsive */
+  @media (max-width: 860px) {
+    .page { grid-template-columns: 1fr; }
+    .sidebar { position: relative; height: auto; padding: 2.5rem 1.75rem; }
+    .sidebar-pillars { display: none; }
+    .form-panel { padding: 2.5rem 1.75rem; max-width: 100%; }
+    .two-col { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 480px) {
+    .sidebar { padding: 2rem 1.25rem; }
+    .form-panel { padding: 2rem 1.25rem; }
+    .sidebar-headline h1 { font-size: 26px; }
+    .step-question { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <div class="brand-mark">
+        <span class="sigla" style="font-size:22px; letter-spacing:0.02em;">Isa Fernanda</span>
+        <span class="nome">Consultoria Empresarial</span>
+      </div>
+      <div class="sidebar-headline">
+        <h1>Transformando desafios em <em>qualidade.</em></h1>
+        <p>Cada negócio tem uma dor específica. Este formulário existe para eu chegar na nossa conversa com diagnóstico, não com perguntas.</p>
+      </div>
+      <div class="sidebar-pillars">
+        <div class="pillar"><span class="pillar-letter">I</span><span class="pillar-text">Inteligência</span></div>
+        <div class="pillar"><span class="pillar-letter">S</span><span class="pillar-text">Solução</span></div>
+        <div class="pillar"><span class="pillar-letter">A</span><span class="pillar-text">Ajuste</span></div>
+      </div>
+    </div>
+    <div class="sidebar-footer">
+      <strong>Isa Fernanda</strong><br>
+      Consultoria Empresarial<br>
+      Cabo Frio, RJ &mdash; @isafernandaoficial
+    </div>
+  </aside>
+
+  <!-- Form panel -->
+  <main class="form-panel">
+
+    <div class="steps-nav" id="steps-nav"></div>
+
+    <form id="fs-form" action="https://api.web3forms.com/submit" method="POST">
+
+      <!-- Web3Forms: funciona localmente e online sem configuração extra -->
+      <input class="form-hidden" type="hidden" name="access_key" value="COLE_SUA_CHAVE_AQUI">
+      <input class="form-hidden" type="hidden" name="subject" value="Novo preenchimento — Isa Fernanda Consultoria Empresarial">
+      <input class="form-hidden" type="hidden" name="from_name" value="Formulário de Captação">
+      <input class="form-hidden" type="hidden" name="redirect" value="false">
+
+      <!-- Step 1: Identificação -->
+      <div class="step active" id="step-1">
+        <div class="step-meta">
+          <span class="step-tag">Passo 1 de 5</span>
+          <h2 class="step-question">Como você se apresenta?</h2>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Nome completo</label>
+          <input type="text" name="nome" id="nome" placeholder="Seu nome completo">
+        </div>
+        <div class="two-col">
+          <div class="field-group">
+            <label class="field-label">WhatsApp</label>
+            <input type="tel" name="whatsapp" id="whatsapp" placeholder="(22) 99999-9999">
+          </div>
+          <div class="field-group">
+            <label class="field-label">E-mail</label>
+            <input type="email" name="email" id="email" placeholder="seu@email.com">
+          </div>
+        </div>
+        <div class="two-col">
+          <div class="field-group">
+            <label class="field-label">Instagram</label>
+            <div class="insta-wrap">
+              <span class="insta-at">@</span>
+              <input type="text" name="instagram" id="instagram" placeholder="seuperfil">
+            </div>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Cidade / Estado</label>
+            <input type="text" name="cidade" id="cidade" placeholder="Ex: Cabo Frio, RJ">
+          </div>
+        </div>
+        <div class="nav-row">
+          <div></div>
+          <button type="button" class="btn-next" onclick="goNext(1)">Continuar</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Perfil -->
+      <div class="step" id="step-2">
+        <div class="step-meta">
+          <span class="step-tag">Passo 2 de 5</span>
+          <h2 class="step-question">Qual é o seu perfil?</h2>
+          <p class="step-hint">Escolha o que melhor descreve você hoje.</p>
+        </div>
+        <input type="hidden" name="perfil" id="perfil-val">
+        <div class="options" id="perfil-opts">
+          <div class="opt" onclick="selectOpt(this,'perfil-val','perfil-opts')">
+            <div class="opt-marker"></div>
+            <div class="opt-body">
+              <span class="opt-text">Médico(a) ou dono(a) de clínica</span>
+              <span class="opt-sub">Consultório, clínica médica ou especialidade</span>
+            </div>
+          </div>
+          <div class="opt" onclick="selectOpt(this,'perfil-val','perfil-opts')">
+            <div class="opt-marker"></div>
+            <div class="opt-body">
+              <span class="opt-text">Profissional de saúde</span>
+              <span class="opt-sub">Fisioterapia, psicologia, odontologia, nutrição, terapias</span>
+            </div>
+          </div>
+          <div class="opt" onclick="selectOpt(this,'perfil-val','perfil-opts')">
+            <div class="opt-marker"></div>
+            <div class="opt-body">
+              <span class="opt-text">Empreendedor(a) de outro setor</span>
+              <span class="opt-sub">Comércio, serviços, estética, eventos, gastronomia</span>
+            </div>
+          </div>
+          <div class="opt" onclick="selectOpt(this,'perfil-val','perfil-opts')">
+            <div class="opt-marker"></div>
+            <div class="opt-body">
+              <span class="opt-text">Profissional liberal / autônomo(a)</span>
+              <span class="opt-sub">Ainda construindo ou formalizando o negócio</span>
+            </div>
+          </div>
+        </div>
+        <div class="nav-row">
+          <button type="button" class="btn-back" onclick="goBack(2)">Voltar</button>
+          <button type="button" class="btn-next" onclick="goNext(2)">Continuar</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Dados do negócio -->
+      <div class="step" id="step-3">
+        <div class="step-meta">
+          <span class="step-tag">Passo 3 de 5</span>
+          <h2 class="step-question">Me conta sobre o seu negócio hoje.</h2>
+          <p class="step-hint">Esses dados ficam entre nós e tornam nossa conversa mais precisa.</p>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Faturamento mensal aproximado <span class="field-optional">(opcional)</span></label>
+          <select name="faturamento" id="faturamento">
+            <option value="">Selecione uma faixa</option>
+            <option>Até R$ 5.000</option>
+            <option>R$ 5.000 a R$ 15.000</option>
+            <option>R$ 15.000 a R$ 30.000</option>
+            <option>R$ 30.000 a R$ 60.000</option>
+            <option>R$ 60.000 a R$ 100.000</option>
+            <option>Acima de R$ 100.000</option>
+            <option>Prefiro não informar</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Pacientes ou clientes atendidos por mês</label>
+          <select name="volume_atendimentos" id="volume">
+            <option value="">Selecione uma faixa</option>
+            <option>Menos de 20</option>
+            <option>20 a 50</option>
+            <option>50 a 100</option>
+            <option>100 a 200</option>
+            <option>Mais de 200</option>
+          </select>
+        </div>
+        <div class="context-note">
+          Não há resposta certa. Esses números me ajudam a entender o seu estágio atual e propor algo que faça sentido para a sua realidade.
+        </div>
+        <div class="nav-row">
+          <button type="button" class="btn-back" onclick="goBack(3)">Voltar</button>
+          <button type="button" class="btn-next" onclick="goNext(3)">Continuar</button>
+        </div>
+      </div>
+
+      <!-- Step 4: Desafios -->
+      <div class="step" id="step-4">
+        <div class="step-meta">
+          <span class="step-tag">Passo 4 de 5</span>
+          <h2 class="step-question">Qual é o maior desafio que te trouxe até aqui?</h2>
+          <p class="step-hint">Pode marcar mais de um.</p>
+        </div>
+        <input type="hidden" name="desafios" id="desafios-val">
+        <div class="options" id="desafio-opts">
+          <div class="opt opt-check" onclick="selectMulti(this,'desafios-val','desafio-opts')">
+            <div class="opt-marker"></div>
+            <div class="opt-body"><span class="opt-text">Atendimento e recepção deixando a desejar</span></div>
+          </div>
+          <div class="opt opt-check" onclick="selectMulti(this,'desafios-val','desafio-opts')">
+            <div class="opt-marker"></div>
+            <div class="opt-body"><span class="opt-text">Processos internos desorganizados</span></div>
+          </div>
+          <div class="opt opt-check" onclick="selectMulti(this,'desafios-val','desafio-opts')">
+            <div class="opt-marker"></div>
+            <div class="opt-body"><span class="opt-text">Dificuldade em reter e fidelizar clientes</span></div>
+          </div>
+          <div class="opt opt-check" onclick="selectMulti(this,'desafios-val','desafio-opts')">
+            <div class="opt-marker"></div>
+            <div class="opt-body"><span class="opt-text">Faturamento estagnado ou imprevisível</span></div>
+          </div>
+          <div class="opt opt-check" onclick="selectMulti(this,'desafios-val','desafio-opts')">
+            <div class="opt-marker"></div>
+            <div class="opt-body"><span class="opt-text">Equipe sem engajamento ou direcionamento</span></div>
+          </div>
+          <div class="opt opt-check" onclick="selectMulti(this,'desafios-val','desafio-opts')">
+            <div class="opt-marker"></div>
+            <div class="opt-body"><span class="opt-text">Quero estruturar do zero com o pé direito</span></div>
+          </div>
+        </div>
+        <div class="nav-row">
+          <button type="button" class="btn-back" onclick="goBack(4)">Voltar</button>
+          <button type="button" class="btn-next" onclick="goNext(4)">Continuar</button>
+        </div>
+      </div>
+
+      <!-- Step 5: Expectativa -->
+      <div class="step" id="step-5">
+        <div class="step-meta">
+          <span class="step-tag">Passo 5 de 5</span>
+          <h2 class="step-question">O que você espera que mude em até 90 dias?</h2>
+          <p class="step-hint">Escreva com suas palavras, sem filtro.</p>
+        </div>
+        <div class="field-group">
+          <textarea name="expectativa" id="expectativa" placeholder="Ex: Quero que minha recepção converta mais, minha equipe trabalhe alinhada e eu me preocupe menos com o operacional..."></textarea>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Como você chegou até mim?</label>
+          <select name="origem" id="origem">
+            <option value="">Selecione</option>
+            <option>Instagram</option>
+            <option>Indicação de alguém</option>
+            <option>Google</option>
+            <option>LinkedIn</option>
+            <option>Já nos conhecemos pessoalmente</option>
+            <option>Outro</option>
+          </select>
+        </div>
+        <div class="nav-row">
+          <button type="button" class="btn-back" onclick="goBack(5)">Voltar</button>
+          <button type="submit" class="btn-submit" onclick="prepareSubmit()">Enviar</button>
+        </div>
+      </div>
+
+    </form>
+
+    <!-- Tela de sucesso (mostrada via JS após envio) -->
+    <div class="success-screen" id="success">
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      </div>
+      <h2>Recebido com atenção.</h2>
+      <p>Analisei suas respostas e entrarei em contato em breve para agendarmos uma conversa. Obrigada pela confiança.</p>
+      <a class="btn-whatsapp" href="https://wa.me/5522992072067" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Falar no WhatsApp
+      </a>
+    </div>
+
+  </main>
+</div>
+
+<script>
+const totalSteps = 5;
+let currentStep = 1;
+
+function buildNav() {
+  const nav = document.getElementById('steps-nav');
+  nav.innerHTML = '';
+  for (let i = 1; i <= totalSteps; i++) {
+    const d = document.createElement('div');
+    d.className = 'step-dot';
+    d.id = 'dot-' + i;
+    nav.appendChild(d);
+  }
+  updateNav();
+}
+
+function updateNav() {
+  for (let i = 1; i <= totalSteps; i++) {
+    const d = document.getElementById('dot-' + i);
+    if (!d) return;
+    d.className = 'step-dot' + (i < currentStep ? ' done' : i === currentStep ? ' active' : '');
+  }
+}
+
+function selectOpt(el, fieldId, groupId) {
+  document.querySelectorAll('#' + groupId + ' .opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById(fieldId).value = el.querySelector('.opt-text').textContent.trim();
+}
+
+function selectMulti(el, fieldId, groupId) {
+  el.classList.toggle('selected');
+  const marker = el.querySelector('.opt-marker');
+  if (el.classList.contains('selected')) {
+    marker.style.background = 'var(--verde-medio)';
+    marker.style.borderColor = 'var(--verde-medio)';
+    marker.style.borderRadius = '4px';
+    marker.innerHTML = '<svg width="10" height="10" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  } else {
+    marker.style.background = '';
+    marker.style.borderColor = '';
+    marker.innerHTML = '';
+  }
+  const selected = Array.from(document.querySelectorAll('#' + groupId + ' .opt.selected'))
+    .map(o => o.querySelector('.opt-text').textContent.trim());
+  document.getElementById(fieldId).value = selected.join(' | ');
+}
+
+function goNext(step) {
+  if (step === 1) {
+    const nome = document.getElementById('nome').value.trim();
+    if (!nome) {
+      document.getElementById('nome').classList.add('field-error');
+      document.getElementById('nome').focus();
+      return;
+    }
+    document.getElementById('nome').classList.remove('field-error');
+  }
+  document.getElementById('step-' + step).classList.remove('active');
+  currentStep = step + 1;
+  document.getElementById('step-' + currentStep).classList.add('active');
+  updateNav();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goBack(step) {
+  document.getElementById('step-' + step).classList.remove('active');
+  currentStep = step - 1;
+  document.getElementById('step-' + currentStep).classList.add('active');
+  updateNav();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function prepareSubmit() {}
+
+// Interceptar envio para mostrar tela de sucesso
+document.getElementById('fs-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const form = this;
+  const data = new FormData(form);
+
+  fetch(form.action, {
+    method: 'POST',
+    body: data,
+    headers: { 'Accept': 'application/json' }
+  }).then(res => {
+    if (res.ok) {
+      form.style.display = 'none';
+      document.getElementById('steps-nav').style.display = 'none';
+      document.getElementById('success').classList.add('active');
+    } else {
+      alert('Algo deu errado. Tente novamente ou entre em contato via WhatsApp.');
+    }
+  }).catch(() => {
+    alert('Erro de conexão. Verifique sua internet e tente novamente.');
+  });
+});
+
+buildNav();
+</script>
+
+</body>
+</html>
