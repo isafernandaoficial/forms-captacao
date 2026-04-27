@@ -93,36 +93,6 @@
     font-weight: 300;
   }
 
-  .sidebar-pillars {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .pillar {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 14px;
-    border: 0.5px solid rgba(173,127,103,0.25);
-    border-radius: 8px;
-    background: rgba(173,127,103,0.06);
-  }
-  .pillar-letter {
-    font-family: 'Playfair Display', serif;
-    font-size: 18px;
-    color: var(--cobre);
-    font-style: italic;
-    width: 20px;
-    flex-shrink: 0;
-  }
-  .pillar-text {
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: rgba(230,225,231,0.7);
-  }
-
   .sidebar-footer {
     font-size: 11px;
     color: rgba(230,225,231,0.3);
@@ -440,7 +410,7 @@
   .form-hidden { display: none; }
 
   /* Error state */
-  .field-error { border-color: #C0392B !important; }
+  .field-error { border-color: #C0392B !important; box-shadow: 0 0 0 3px rgba(192,57,43,0.1) !important; }
   .error-msg { font-size: 11px; color: #C0392B; font-weight: 500; margin-top: 2px; }
   .lgpd-notice { display: flex; align-items: flex-start; gap: 10px; padding: 12px 16px; background: rgba(21,48,41,0.04); border: 0.5px solid rgba(21,48,41,0.12); border-radius: 8px; font-size: 12px; color: var(--texto-suave); line-height: 1.6; font-weight: 300; }
   .lgpd-notice svg { flex-shrink: 0; margin-top: 2px; stroke: var(--verde-medio); }
@@ -450,7 +420,6 @@
   @media (max-width: 860px) {
     .page { grid-template-columns: 1fr; }
     .sidebar { position: relative; height: auto; padding: 2.5rem 1.75rem; }
-    .sidebar-pillars { display: none; }
     .form-panel { padding: 2.5rem 1.75rem; max-width: 100%; }
     .two-col { grid-template-columns: 1fr; }
   }
@@ -474,13 +443,8 @@
         <span class="nome">Consultoria Empresarial</span>
       </div>
       <div class="sidebar-headline">
-        <h1>Transformando desafios em <em>qualidade.</em></h1>
-        <p>Cada negócio tem uma dor específica. Este formulário existe para eu chegar na nossa conversa com diagnóstico, não com perguntas.</p>
-      </div>
-      <div class="sidebar-pillars">
-        <div class="pillar"><span class="pillar-letter">I</span><span class="pillar-text">Inteligência</span></div>
-        <div class="pillar"><span class="pillar-letter">S</span><span class="pillar-text">Solução</span></div>
-        <div class="pillar"><span class="pillar-letter">A</span><span class="pillar-text">Ajuste</span></div>
+        <h1>Cada negócio carrega uma história. Quero ouvir a sua.</h1>
+        <p>Preencha com calma. Não existe resposta certa ou errada aqui. Quanto mais você compartilhar, mais preparada estarei para a nossa conversa.</p>
       </div>
     </div>
     <div class="sidebar-footer">
@@ -511,16 +475,16 @@
         </div>
         <div class="field-group">
           <label class="field-label">Nome completo</label>
-          <input type="text" name="nome" id="nome" placeholder="Seu nome completo">
+          <input type="text" name="nome" id="nome" required placeholder="Seu nome completo">
         </div>
         <div class="two-col">
           <div class="field-group">
             <label class="field-label">WhatsApp</label>
-            <input type="tel" name="whatsapp" id="whatsapp" placeholder="(22) 99999-9999">
+            <input type="tel" name="whatsapp" id="whatsapp" required placeholder="(22) 99999-9999">
           </div>
           <div class="field-group">
             <label class="field-label">E-mail</label>
-            <input type="email" name="email" id="email" placeholder="seu@email.com">
+            <input type="email" name="email" id="email" required placeholder="seu@email.com">
           </div>
         </div>
         <div class="two-col">
@@ -533,7 +497,7 @@
           </div>
           <div class="field-group">
             <label class="field-label">Cidade / Estado</label>
-            <input type="text" name="cidade" id="cidade" placeholder="Ex: Cabo Frio, RJ">
+            <input type="text" name="cidade" id="cidade" required placeholder="Ex: Cabo Frio, RJ">
           </div>
         </div>
         <div class="nav-row">
@@ -608,7 +572,7 @@
         </div>
         <div class="field-group">
           <label class="field-label">Pacientes ou clientes atendidos por mês</label>
-          <select name="volume_atendimentos" id="volume">
+          <select name="volume_atendimentos" id="volume" required>
             <option value="">Selecione uma faixa</option>
             <option>Menos de 20</option>
             <option>20 a 50</option>
@@ -674,11 +638,11 @@
           <p class="step-hint">Escreva com suas palavras, sem filtro.</p>
         </div>
         <div class="field-group">
-          <textarea name="expectativa" id="expectativa" placeholder="Ex: Quero que minha recepção converta mais, minha equipe trabalhe alinhada e eu me preocupe menos com o operacional..."></textarea>
+          <textarea name="expectativa" id="expectativa" required placeholder="Ex: Quero que minha recepção converta mais, minha equipe trabalhe alinhada e eu me preocupe menos com o operacional..."></textarea>
         </div>
         <div class="field-group">
           <label class="field-label">Como você chegou até mim?</label>
-          <select name="origem" id="origem">
+          <select name="origem" id="origem" required>
             <option value="">Selecione</option>
             <option>Instagram</option>
             <option>Indicação de alguém</option>
@@ -764,16 +728,65 @@ function selectMulti(el, fieldId, groupId) {
   document.getElementById(fieldId).value = selected.join(' | ');
 }
 
+function markError(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.add('field-error');
+  el.addEventListener('input', function() { this.classList.remove('field-error'); }, { once: true });
+  el.addEventListener('change', function() { this.classList.remove('field-error'); }, { once: true });
+}
+
 function goNext(step) {
+  let valid = true;
+
   if (step === 1) {
     const nome = document.getElementById('nome').value.trim();
-    if (!nome) {
-      document.getElementById('nome').classList.add('field-error');
-      document.getElementById('nome').focus();
+    const whatsapp = document.getElementById('whatsapp').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const cidade = document.getElementById('cidade').value.trim();
+    if (!nome)     { markError('nome');     valid = false; }
+    if (!whatsapp) { markError('whatsapp'); valid = false; }
+    if (!email)    { markError('email');    valid = false; }
+    if (!cidade)   { markError('cidade');   valid = false; }
+    if (!valid) {
+      const first = document.querySelector('#step-1 .field-error');
+      if (first) first.focus();
       return;
     }
-    document.getElementById('nome').classList.remove('field-error');
   }
+
+  if (step === 2) {
+    const perfil = document.getElementById('perfil-val').value.trim();
+    if (!perfil) {
+      document.querySelectorAll('#perfil-opts .opt').forEach(o => o.style.outline = '1.5px solid #C0392B');
+      setTimeout(() => document.querySelectorAll('#perfil-opts .opt').forEach(o => o.style.outline = ''), 1800);
+      return;
+    }
+  }
+
+  if (step === 3) {
+    const volume = document.getElementById('volume').value;
+    if (!volume) { markError('volume'); valid = false; }
+    if (!valid) return;
+  }
+
+  if (step === 4) {
+    const desafios = document.getElementById('desafios-val').value.trim();
+    if (!desafios) {
+      document.querySelectorAll('#desafio-opts .opt').forEach(o => o.style.outline = '1.5px solid #C0392B');
+      setTimeout(() => document.querySelectorAll('#desafio-opts .opt').forEach(o => o.style.outline = ''), 1800);
+      return;
+    }
+  }
+
+  if (step === 5) {
+    const expectativa = document.getElementById('expectativa').value.trim();
+    const origem = document.getElementById('origem').value;
+    if (!expectativa) { markError('expectativa'); valid = false; }
+    if (!origem)      { markError('origem');      valid = false; }
+    if (!valid) return;
+  }
+
   document.getElementById('step-' + step).classList.remove('active');
   currentStep = step + 1;
   document.getElementById('step-' + currentStep).classList.add('active');
